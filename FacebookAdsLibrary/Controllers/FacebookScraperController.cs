@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Net.Http;
 using FacebookAdsLibrary.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace FacebookAdsLibrary.Controllers;
 
@@ -45,7 +46,13 @@ public class FacebookScraperController : Controller
         response.EnsureSuccessStatusCode();
 
         var responseJson = await response.Content.ReadAsStringAsync();
-        var books = JsonSerializer.Deserialize<List<BookVM>>(responseJson);
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var books = JsonSerializer.Deserialize<List<BookVM>>(responseJson,options);
 
         return View(books);
     }
