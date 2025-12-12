@@ -2,12 +2,19 @@
 using System.Text.Json;
 using System.Net.Http;
 using FacebookAdsLibrary.Models;
+using System.Text;
 
 namespace FacebookAdsLibrary.Controllers;
 
 public class FacebookScraperController : Controller
 {
+    #region Const
+    private const string WebhookUrl = "http://localhost:5678/webhook-test/scrape-books";
+    #endregion
+
+    #region Field
     private readonly IHttpClientFactory _httpFactory;
+    #endregion
 
     public FacebookScraperController(IHttpClientFactory httpFactory)
     {
@@ -21,21 +28,20 @@ public class FacebookScraperController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Search(string keyword)
+    public async Task<IActionResult> Index(string search)
     {
-        if (string.IsNullOrWhiteSpace(keyword))
+        if (string.IsNullOrWhiteSpace(search))
         {
-            ViewBag.Error = "Please enter a keyword.";
+            ViewBag.Error = "Search is required";
             return View();
         }
 
         var client = _httpFactory.CreateClient();
-        var webhookUrl = "http://localhost:5678/webhook/scrape-books";
 
-        var postData = new { keyword };
-        var json = new StringContent(JsonSerializer.Serialize(postData), System.Text.Encoding.UTF8, "application/json");
+        var json = new StringContent(JsonSerializer.Serialize(new { search }), Encoding.UTF8, "application/json");
 
-        var response = await client.PostAsync(webhookUrl, json);
+        var response = await client.PostAsync(WebhookUrl, json);
+
         response.EnsureSuccessStatusCode();
 
         var responseJson = await response.Content.ReadAsStringAsync();
