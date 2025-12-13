@@ -54,12 +54,12 @@ public class FacebookScraperController : Controller
 
         var books = JsonSerializer.Deserialize<List<BookVM>>(responseJson, options);
 
-        if (books?.Count > 0)
-        {
-            var getSearchedBook = books.Where(x => x.Title.Contains(search));
+        //if (books?.Count > 0)
+        //{
+        //    var getSearchedBook = books.Where(x => x.Title.Contains(search));
 
-            return View(getSearchedBook);
-        }
+        //    return View(getSearchedBook);
+        //}
 
         return View(books);
     }
