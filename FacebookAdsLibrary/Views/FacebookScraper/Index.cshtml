@@ -1,4 +1,4 @@
-﻿@model List<BookVM>
+﻿@model IEnumerable<BookVM>
 
 <h2>Book Search</h2>
 
@@ -30,9 +30,11 @@
                     <td>@book.Title</td>
                     <td>@book.Price</td>
                     <td>@book.Rating</td>
-                    <td><a href="@book.Url" target="_blank">View</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    <td>
+                        <a href="https://books.toscrape.com/@book.Url" target="_blank">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 }

@@ -43,7 +43,7 @@ public class FacebookScraperController : Controller
 
         var response = await client.PostAsync(WebhookUrl, json);
 
-        response.EnsureSuccessStatusCode();
+         response.EnsureSuccessStatusCode();
 
         var responseJson = await response.Content.ReadAsStringAsync();
 
@@ -52,7 +52,14 @@ public class FacebookScraperController : Controller
             PropertyNameCaseInsensitive = true
         };
 
-        var books = JsonSerializer.Deserialize<List<BookVM>>(responseJson,options);
+        var books = JsonSerializer.Deserialize<List<BookVM>>(responseJson, options);
+
+        if (books?.Count > 0)
+        {
+            var getSearchedBook = books.Where(x => x.Title.Contains(search));
+
+            return View(getSearchedBook);
+        }
 
         return View(books);
     }
